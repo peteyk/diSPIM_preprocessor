@@ -5,7 +5,9 @@ import ij.ImageStack;
 import ij.plugin.ImageCalculator;
 import ij.plugin.ZProjector;
 import ij.process.ImageProcessor;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -91,7 +93,7 @@ public class DiSPIM_preprocessor {
 
     private void export(int timepoints, String directory, TaggedImageStorage mpt,
             int x, int y, int width, int height)
-            throws JSONException, MMScriptException {
+            throws JSONException, MMScriptException, IOException {
 
         ImagePlus ip = new ImagePlus("tmp", ImageUtils.makeProcessor(mpt.getImage(0, 0, 0, 0)));
         String baseName = "MVR_STACKS";
@@ -148,8 +150,13 @@ public class DiSPIM_preprocessor {
         if (timepoints == 0) {
             numTimepoints = mpt.lastAcquiredFrame();
         } else numTimepoints = timepoints;
-        File file = new File(seriesDirectory);
-                
+        
+        File file = new File(seriesDirectory + File.separator + numTimepoints); //create file showing number of timepoints to process later
+        BufferedWriter out = new BufferedWriter(new FileWriter(file)); 
+        String st = Integer.toString(numTimepoints);
+        out.write(st);
+        out.close();
+    
         for (int c = 0; c < mpt.getSummaryMetadata().getInt("Channels"); c++) {  // for each channel (4)
 
             for (int t = 0; t < numTimepoints; t++) {  // for each timepoint (1000)
