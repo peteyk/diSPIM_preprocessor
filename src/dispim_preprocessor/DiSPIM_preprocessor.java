@@ -104,7 +104,6 @@ public class DiSPIM_preprocessor {
             firstSideIsA = false;
         }
 
-        ImageProcessor iProc = ip.getProcessor();
         int nrSides = 0;
         switch (mpt.getSummaryMetadata().getString("NumberOfSides")) {
             case "2":
@@ -113,7 +112,6 @@ public class DiSPIM_preprocessor {
             case "1":
                 nrSides = 1;
                 break;
-            //throw new SaveTaskException("unsupported number of sides");
             default:
                 break;
         }
@@ -264,7 +262,6 @@ public class DiSPIM_preprocessor {
             int angle = 0;
             String s = f.getName().substring(0, f.getName().length() - 4);
             int time = Integer.parseInt(s.substring(6));
-            //int length = String.valueOf(time).length();
 
             if (f.getPath().contains("mCherry") || f.getPath().contains("output 7")) {
                 channel = 2;
@@ -273,8 +270,7 @@ public class DiSPIM_preprocessor {
                 angle = 90;
             }
             
-            File newName;
-            newName = new File(stackDirectory + File.separator + "spim_TL" + time
+            File newName = new File(stackDirectory + File.separator + "spim_TL" + time
                     + "_Channel" + channel + "_Angle" + angle + ".tif");
             f.renameTo(newName);
             
